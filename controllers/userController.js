@@ -1,0 +1,87 @@
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const { config } = require('../config/dotenvConfig')
+const { findByEmail, createUser } = require('../models/userModel')
+const { use, patch, path } = require('../app')
+
+
+const cookieOpts = {
+    httpOnly: true,
+    secure: false, // https-nél true
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 1000 * 60 * 60 * 24 * 7
+}
+
+// register
+async function register(req, res) {
+    try {
+        const { username, password, email} = req.body
+      
+        if (!username || !email || !password) {
+            return res.status(400).json({ error: 'Minden mezőt tölts ki!'})
+        }
+
+        const exist = await findByEmail(email)
+        if (exist) {
+            return res.status(409).json({ error: 'Ez az email már létezik!'})
+        }
+
+        const hash = await bcrypt.hash(password, 10)
+        const { insertId } = await createUser(username, email, hash)
+
+        return res.status(201).json({ message: 'Sikeres regisztráció!', insertId })
+
+
+
+
+    } catch (err) {
+        return res.status(500).json({ error: 'Szerver oldali hiba', err})
+    }
+}
+
+// login
+async function login(req, res) {
+    try {
+        const { email, password } = req.body
+       // console.log(email, psw);
+
+    if (!email || !password) {
+        return res.status(400).json({ error: 'Email és jelszó kötelező'})
+    } 
+
+        const userSQL = await findByEmail(email)
+        //console.log(userSQL);
+        if (!userSQL) {
+            return res.status(401).json({ error: 'Hibás email' })
+        }
+
+
+        const ok = await bcrypt.compare(password, userSQL.password)
+       // console.log(ok);
+       if (!ok) {
+            return res.status(401).json({ error: 'Hibás jelszó'})
+       }
+
+       const token = jwt.sign(
+            { user_id: userSQL.user_id, email: userSQL.email, username: userSQL.username, role: userSQL.role },
+            config.JWT_SECRET,
+            { expiresIn: config.JWT_EXPIRES_IN }
+       )
+      // console.log(token);
+      res.cookie(config.COOKIE_NAME, token, cookieOpts)
+       return res.status(200).json({ message: 'Sikeres bejelentkezés' })
+
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ error: 'Bejelentkezési hiba', err})
+    }
+   
+}
+
+// logout
+async function logout(req, res) {
+    return res.clearCookie(config.COOKIE_NAME, { path: '/' }).status(200).json({ message: 'Sikeres kilépés' })
+}
+
+module.exports = { register, login, logout }
