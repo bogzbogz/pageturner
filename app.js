@@ -9,7 +9,7 @@ const userRoutes = require('./routes/userRoutes')
 const app = express()
 app.use(cors({
     origin: ['http://127.0.0.1:5173'],
-    credentials: 'include'
+    credentials: true
 }))
 
 app.use(express.json())
