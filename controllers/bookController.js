@@ -28,13 +28,13 @@ async function rating(req, res) {
         const { user_id } = req.user
         const  book_id  = req.params.id
         const { rate } = req.body
-        console.log(user_id, book_id, rate);
+       // console.log(user_id, book_id, rate);
 
        await createRating(user_id, book_id, rate)
 
         return res.status(201).json({ message: 'Értékelés leadva' })
     } catch (err) {
-       console.log(err);
+      // console.log(err);
        if (err.code === 'ER_DUP_ENTRY') {
         return res.status(400).json({ error: 'Ezt a könyvet már értékelted' })
     }
@@ -49,7 +49,7 @@ async function delRating(req, res) {
        // console.log(user_id, book_id);
 
     const result = await deleteRating(user_id, book_id)
-    console.log(result);
+   // console.log(result);
 
         if (result.affectedRows === 0) {
             return res.status(400).json({ error: 'Nincs ilyen értékelés'})
