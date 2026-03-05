@@ -13,15 +13,21 @@ async function bookId() {
 }
 
 async function createRating(user_id, book_id, rate) {
-   const sql = 'INSERT INTO ratings(`user_id`, `book_id`, `rate`) VALUES (?, ?, ?)'
+   const sql = 'INSERT INTO ratings(user_id, book_id, rate) VALUES (?, ?, ?)'
     const [result] = await db.query(sql, [user_id, book_id, rate])
 }
 
 async function deleteRating(user_id, book_id) {
-    const sql = 'DELETE FROM `ratings` WHERE user_id = ? AND book_id = ?'
+    const sql = 'DELETE FROM ratings WHERE user_id = ? AND book_id = ?'
      const [result] = await db.query(sql, [user_id, book_id])
      return result
  }
 
+ async function categorySelect(categories_id) {
+    const sql = 'SELECT * FROM books WHERE categories_id = ?'
+    const [result] = await db.query(sql, [categories_id])
+    return result
+}
 
-module.exports = { getCardBooks, bookId, createRating, deleteRating }
+
+module.exports = { getCardBooks, bookId, createRating, deleteRating, categorySelect }

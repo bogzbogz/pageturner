@@ -1,4 +1,4 @@
-const { getCardBooks, bookId, createRating, deleteRating } = require('../models/bookModel')
+const { getCardBooks, bookId, createRating, deleteRating, categorySelect } = require('../models/bookModel')
 
 
 async function getBooks(req, res) {
@@ -62,4 +62,15 @@ async function delRating(req, res) {
     }
 }
 
-module.exports = { getBooks, getBookById, rating, delRating }
+async function getCategory(req, res) {
+    try {
+        const result = await categorySelect()
+
+        return res.status(200).json(result)
+    } catch (err) {
+       // console.log(err);
+        return res.status(500).json({ error: 'Nem sikerült lekérni a kategóriát'})
+    }
+}
+
+module.exports = { getBooks, getBookById, rating, delRating, getCategory }
