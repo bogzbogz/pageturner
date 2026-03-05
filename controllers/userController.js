@@ -79,9 +79,20 @@ async function login(req, res) {
    
 }
 
+async function whoAmI(req, res) {
+    const { user_id, username, email, role} = req.user
+    try {
+        return res.status(200).json({user_id: user_id, username: username, email: email, role: role})
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({error: 'whoAmI server oldali hiba'})
+        return
+    }
+}
+
 // logout
 async function logout(req, res) {
     return res.clearCookie(config.COOKIE_NAME, { path: '/' }).status(200).json({ message: 'Sikeres kilépés' })
 }
 
-module.exports = { register, login, logout }
+module.exports = { register, login, whoAmI, logout }
