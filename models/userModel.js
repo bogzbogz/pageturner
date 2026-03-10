@@ -14,4 +14,5 @@ async function createUser(username, email, hash) {
     return { insertId: result.insertId}
 }
 
+
 module.exports = { findByEmail, createUser }

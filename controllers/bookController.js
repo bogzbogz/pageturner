@@ -65,7 +65,7 @@ async function delRating(req, res) {
 async function getCategory(req, res) {
     try {
         const result = await categorySelect()
-
+        
         return res.status(200).json(result)
     } catch (err) {
        // console.log(err);
