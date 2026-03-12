@@ -10,7 +10,7 @@ const bookRoutes = require('./routes/bookRoutes')
 const app = express()
 app.use(cors({
     origin: ['http://localhost:5173'],
-    credentials: 'include'
+    credentials: true
 }))
 
 app.use(express.json())

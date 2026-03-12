@@ -8,7 +8,7 @@ router.get('/cardBooks', getBooks)
 router.get('/getBook/:id', getBookById)
 router.post('/rating/:id', auth, rating)
 router.delete('/rating/:id', auth, delRating)
-router.get('/category/:id', auth, getCategory)
+router.get('/category/:categories_id', auth, getCategory)
 
 
 module.exports = router

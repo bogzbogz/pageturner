@@ -24,9 +24,10 @@ async function deleteRating(user_id, book_id) {
  }
 
  async function categorySelect(categories_id) {
+    console.log(categories_id);
     const sql = 'SELECT * FROM books WHERE categories_id = ?'
     const [result] = await db.query(sql, [categories_id])
-    
+    console.log(result);
     return result
 }
 
