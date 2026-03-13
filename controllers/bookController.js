@@ -1,4 +1,4 @@
-const { getCardBooks, bookId, createRating, deleteRating, categorySelect } = require('../models/bookModel')
+const { getCardBooks, bookId, createRating, deleteRating, categorySelect, createAuthor, createBook, getAuthorIdByName } = require('../models/bookModel')
 
 
 async function getBooks(req, res) {
@@ -22,6 +22,34 @@ async function getBookById(req, res) {
         return res.status(500).json({ error: 'Nem sikerült lekérni a könyvet' })
     }
 }
+
+
+
+async function bookCreate(req, res) {
+    try {
+        const { title, author, categories_id, description } = req.body;
+
+        if (!title || !author || !categories_id || !description || !req.file) {
+            return res.status(400).json({ error: 'Minden mezőt tölts ki, és tölts fel egy képet!' });
+        }
+
+        // coverPath a user ID-val együtt
+        const coverPath = `/uploads/${req.user.user_id}/${req.file.filename}`;
+
+        let author_id = await getAuthorIdByName(author);
+        if (!author_id) {
+            author_id = await createAuthor(author);
+        }
+
+        const book_id = await createBook(categories_id, author_id, title, description, coverPath);
+
+        return res.status(201).json({ message: 'Sikeres felvitel!', book_id, author_id, coverPath });
+    } catch (err) {
+        return res.status(500).json({ error: 'Szerver oldali hiba', err });
+    }
+}
+
+module.exports = { bookCreate };
 
 async function rating(req, res) {
     try {
@@ -76,4 +104,4 @@ async function getCategory(req, res) {
     }
 }
 
-module.exports = { getBooks, getBookById, rating, delRating, getCategory }
+module.exports = { getBooks, getBookById, bookCreate, rating, delRating, getCategory }
