@@ -23,8 +23,6 @@ async function getBookById(req, res) {
     }
 }
 
-
-
 async function bookCreate(req, res) {
     try {
         const { title, author, categories_id, description } = req.body;
@@ -34,7 +32,7 @@ async function bookCreate(req, res) {
         }
 
         // coverPath a user ID-val együtt
-        const coverPath = `/uploads/${req.user.user_id}/${req.file.filename}`;
+        const coverPath = `uploads_tmp/${req.user.user_id}/${req.file.filename}`;
 
         let author_id = await getAuthorIdByName(author);
         if (!author_id) {
@@ -48,8 +46,6 @@ async function bookCreate(req, res) {
         return res.status(500).json({ error: 'Szerver oldali hiba', err });
     }
 }
-
-module.exports = { bookCreate };
 
 async function rating(req, res) {
     try {

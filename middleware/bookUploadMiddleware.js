@@ -7,7 +7,7 @@ const MAX_FILE_SIZE = 1024 * 1024 * 10; // 10MB
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         const user_id = req.user.user_id; // auth middleware adja
-        const uploadDir = path.join(process.cwd(), 'uploads', String(user_id));
+        const uploadDir = path.join(process.cwd(), 'uploads_tmp', String(user_id));
 
         try {
             fs.mkdirSync(uploadDir, { recursive: true });

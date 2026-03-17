@@ -16,7 +16,7 @@ app.use(cors({
 app.use(express.json())
 app.use(cookieParser())
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
+app.use('/uploads_tmp', express.static(path.join(__dirname, 'uploads_tmp')))
 app.use('/users', userRoutes)
 app.use('/book', bookRoutes)
 module.exports = app

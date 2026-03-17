@@ -7,7 +7,7 @@ async function getCardBooks() {
 }
 
 async function bookId() {
-   const sql = 'SELECT books.book_id, title, authors.author, cover, description, ratings.rate FROM books LEFT JOIN authors ON books.author_id = authors.author_id LEFT JOIN ratings ON books.book_id = ratings.book_id'
+   const sql = 'SELECT books.book_id, title, authors.author,cover, description, ratings.rate FROM books LEFT JOIN authors ON books.author_id = authors.author_id LEFT JOIN ratings ON books.book_id = ratings.book_id'
     const [result] = await db.query(sql)
     return result
 }
