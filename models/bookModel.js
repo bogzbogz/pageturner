@@ -44,12 +44,24 @@ async function deleteRating(user_id, book_id) {
  }
 
  async function categorySelect(categories_id) {
-    console.log(categories_id);
+    console.log(categories_id)
     const sql = 'SELECT * FROM books WHERE categories_id = ?'
     const [result] = await db.query(sql, [categories_id])
-    console.log(result);
+    console.log(result)
     return result
 }
 
+async function rndBook() {
+    const sql = 'SELECT b.title, a.author, b.cover, ROUND(AVG(r.rate),1) AS ratings FROM books b JOIN authors a ON b.author_id = a.author_id LEFT JOIN ratings r ON b.book_id = r.book_id GROUP BY b.book_id, b.title, a.author, b.cover ORDER BY RAND() LIMIT 3'
+    const [result] = await db.query(sql)
 
-module.exports = { getCardBooks, bookId, createAuthor, createBook, getAuthorIdByName, createRating, deleteRating, categorySelect }
+    return result
+}
+
+async function userRatedBooks(userId) {
+    const sql = 'SELECT b.title, a.author, b.cover, ROUND(AVG(r.rate),1) AS ratings FROM books b JOIN authors a ON b.author_id = a.author_id JOIN ratings r ON b.book_id = r.book_id AND r.user_id = ? GROUP BY b.book_id, b.title, a.author, b.cover ORDER BY RAND() LIMIT 3'
+    const [result] = await db.query(sql, [userId])
+    return result
+}
+
+module.exports = { getCardBooks, bookId, createAuthor, createBook, getAuthorIdByName, createRating, deleteRating, categorySelect, rndBook, userRatedBooks }
