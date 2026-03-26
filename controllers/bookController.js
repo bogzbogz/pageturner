@@ -1,14 +1,14 @@
-const { getCardBooks, bookId, createRating, deleteRating, categorySelect } = require('../models/bookModel')
+const { getCardBooks, bookId, createRating, deleteRating, categorySelect, createAuthor, createBook, getAuthorIdByName, rndBook, userRatedBooks } = require('../models/bookModel')
 
 
 async function getBooks(req, res) {
     try {
-        const result = await  getCardBooks()
+        const result = await getCardBooks()
 
         return res.status(200).json(result)
     } catch (err) {
-       // console.log(err);
-        return res.status(500).json({ error: 'Nem sikerült lekérni a könyveket'})
+        // console.log(err);
+        return res.status(500).json({ error: 'Nem sikerült lekérni a könyveket' })
     }
 }
 
@@ -18,59 +18,108 @@ async function getBookById(req, res) {
 
         return res.status(200).json(result)
     } catch (err) {
-       // console.log(err);
-        return res.status(500).json({ error: 'Nem sikerült lekérni a könyvet'})
+        // console.log(err);
+        return res.status(500).json({ error: 'Nem sikerült lekérni a könyvet' })
+    }
+}
+
+async function bookCreate(req, res) {
+    try {
+        const { title, author, categories_id, description } = req.body;
+
+        if (!title || !author || !categories_id || !description || !req.file) {
+            return res.status(400).json({ error: 'Minden mezőt tölts ki, és tölts fel egy képet!' });
+        }
+
+        // coverPath a user ID-val együtt
+        const coverPath = `uploads_tmp/${req.user.user_id}/${req.file.filename}`;
+
+        let author_id = await getAuthorIdByName(author);
+        if (!author_id) {
+            author_id = await createAuthor(author);
+        }
+
+        const book_id = await createBook(categories_id, author_id, title, description, coverPath);
+
+        return res.status(201).json({ message: 'Sikeres felvitel!', book_id, author_id, coverPath });
+    } catch (err) {
+        return res.status(500).json({ error: 'Szerver oldali hiba', err });
     }
 }
 
 async function rating(req, res) {
     try {
         const { user_id } = req.user
-        const  book_id  = req.params.id
+        const book_id = req.params.id
         const { rate } = req.body
-       // console.log(user_id, book_id, rate);
+        // console.log(user_id, book_id, rate);
 
-       await createRating(user_id, book_id, rate)
+        await createRating(user_id, book_id, rate)
 
         return res.status(201).json({ message: 'Értékelés leadva' })
     } catch (err) {
-      // console.log(err);
-       if (err.code === 'ER_DUP_ENTRY') {
-        return res.status(400).json({ error: 'Ezt a könyvet már értékelted' })
-    }
-    return res.status(500).json({ error: 'Hiba az értékelésnél'})
+        // console.log(err);
+        if (err.code === 'ER_DUP_ENTRY') {
+            return res.status(400).json({ error: 'Ezt a könyvet már értékelted' })
+        }
+        return res.status(500).json({ error: 'Hiba az értékelésnél' })
     }
 }
 
 async function delRating(req, res) {
     try {
         const { user_id } = req.user
-        const  book_id  = req.params.id
-       // console.log(user_id, book_id);
+        const book_id = req.params.id
+        // console.log(user_id, book_id);
 
-    const result = await deleteRating(user_id, book_id)
-   // console.log(result);
+        const result = await deleteRating(user_id, book_id)
+        // console.log(result);
 
         if (result.affectedRows === 0) {
-            return res.status(400).json({ error: 'Nincs ilyen értékelés'})
+            return res.status(400).json({ error: 'Nincs ilyen értékelés' })
         }
-    
-            return res.status(204).json()
+
+        return res.status(204).json()
     } catch (err) {
         //console.log(err);
-        return res.status(500).json({ error: 'Hiba a törlésnél'}) 
+        return res.status(500).json({ error: 'Hiba a törlésnél' })
     }
 }
 
 async function getCategory(req, res) {
     try {
-        const result = await categorySelect()
-
+        //console.log(req.params);
+        const { categories_id } = req.params
+        console.log(categories_id);
+        const result = await categorySelect(categories_id)
+        //console.log(result);
         return res.status(200).json(result)
     } catch (err) {
-       // console.log(err);
-        return res.status(500).json({ error: 'Nem sikerült lekérni a kategóriát'})
+        // console.log(err);
+        return res.status(500).json({ error: 'Nem sikerült lekérni a kategóriát' })
     }
 }
 
-module.exports = { getBooks, getBookById, rating, delRating, getCategory }
+async function randomBook(req, res) {
+    try {
+       const result = await rndBook()
+
+       return res.status(200).json(result)
+    } catch (err) {
+       // console.log(err)
+        return res.status(500).json({ error: 'Adatbázis hiba a könyvek megjelenítésekor' })
+    }
+   
+}
+
+async function userRatedBook(req, res) {
+    try {
+        const result = await userRatedBooks(req.user.user_id)
+        return res.status(200).json(result)
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({ error: 'Adatbázis hiba a felhasználó értékelt könyveinél' });
+    }
+}
+
+module.exports = { getBooks, getBookById, bookCreate, rating, delRating, getCategory, randomBook, userRatedBook }
