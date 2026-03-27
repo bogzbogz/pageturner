@@ -64,4 +64,5 @@ async function userRatedBooks(userId) {
     return result
 }
 
+
 module.exports = { getCardBooks, bookId, createAuthor, createBook, getAuthorIdByName, createRating, deleteRating, categorySelect, rndBook, userRatedBooks }

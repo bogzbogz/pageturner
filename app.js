@@ -4,6 +4,7 @@ const cors = require('cors')
 const path = require('path')
 const userRoutes = require('./routes/userRoutes')
 const bookRoutes = require('./routes/bookRoutes')
+const adminRoutes = require('./routes/adminRoutes')
 
 
 
@@ -19,4 +20,5 @@ app.use(cookieParser())
 app.use('/uploads_tmp', express.static(path.join(__dirname, 'uploads_tmp')))
 app.use('/users', userRoutes)
 app.use('/book', bookRoutes)
+app.use('/admin', adminRoutes)
 module.exports = app

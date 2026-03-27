@@ -14,11 +14,6 @@ async function createUser(username, email, hash) {
     return { insertId: result.insertId}
 }
 
-async function getAllUser() {
-    const sql = 'SELECT * FROM users'
-    const [result] = await db.query(sql)
 
-    return result
-}
 
-module.exports = { findByEmail, createUser, getAllUser }
+module.exports = { findByEmail, createUser }

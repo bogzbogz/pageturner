@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { config } = require('../config/dotenvConfig')
 const { findByEmail, createUser, getAllUser } = require('../models/userModel')
-const { use, patch, path } = require('../app')
+
 
 
 const cookieOpts = {
@@ -95,14 +95,5 @@ async function logout(req, res) {
     return res.clearCookie(config.COOKIE_NAME, { path: '/' }).status(200).json({ message: 'Sikeres kilépés' })
 }
 
-async function allUser(req, res) {
-    try {
-        const result = await getAllUser()
 
-        return res.status(200).json(result)
-    } catch (err) {
-        return res.status(500).json({ error: 'összes user lekérése server oldali hiba'})
-    }
-}
-
-module.exports = { register, login, whoAmI, logout, allUser }
+module.exports = { register, login, whoAmI, logout }
