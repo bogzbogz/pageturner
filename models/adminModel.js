@@ -1,5 +1,21 @@
 const db = require('../db/db')
 
+// egy felhasználó módosítása id alapján
+async function userEdit(user_id, username, email, role) {
+    const sql = 'UPDATE users SET username = ?, email = ?, role = ? WHERE user_id = ?'
+    const [result] = await db.query(sql, [username, email, role, user_id])
+    
+    return result
+}
+
+// egy felhasználó törlése id alapján
+async function userDelete(user_id) {
+    const sql = 'DELETE FROM users WHERE user_id = ?'
+    const [result] = await db.query(sql, [user_id])
+
+    return result
+}
+
 async function getAllUser() {
     const sql = 'SELECT * FROM users'
     const [result] = await db.query(sql)
@@ -15,4 +31,4 @@ async function getAllBook() {
     return result
 }
 
-module.exports = { getAllBook, getAllUser }
+module.exports = { userEdit, userDelete, getAllBook, getAllUser }
