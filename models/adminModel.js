@@ -31,4 +31,18 @@ async function getAllBook() {
     return result
 }
 
-module.exports = { userEdit, userDelete, getAllBook, getAllUser }
+// egy könyv módosítása id alapján
+async function bookEdit(book_id, categories_id, author_id, title, description, cover) {
+    const sql = 'UPDATE books SET categories_id = ?, author_id = ?, title = ?, description = ?, cover = ? WHERE book_id = ?'
+    const [result] = await db.query(sql, [categories_id, author_id, title, description, cover, book_id])
+    return result
+}
+ 
+// egy könyv törlése id alapján
+async function bookDelete(book_id) {
+    const sql = 'DELETE FROM books WHERE book_id = ?'
+    const [result] = await db.query(sql, [book_id])
+    return result
+}
+
+module.exports = { userEdit, userDelete, getAllBook, getAllUser, bookEdit, bookDelete }
