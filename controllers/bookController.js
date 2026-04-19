@@ -90,7 +90,7 @@ async function getCategory(req, res) {
     try {
         //console.log(req.params);
         const { categories_id } = req.params
-        console.log(categories_id);
+       
         const result = await categorySelect(categories_id)
         //console.log(result);
         return res.status(200).json(result)
