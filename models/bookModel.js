@@ -6,10 +6,10 @@ async function getCardBooks() {
     return result
 }
 
-async function bookId() {
-   const sql = 'SELECT books.book_id, title, authors.author,cover, description, ratings.rate FROM books LEFT JOIN authors ON books.author_id = authors.author_id LEFT JOIN ratings ON books.book_id = ratings.book_id'
-    const [result] = await db.query(sql)
-    return result
+async function bookId(id) {
+    const sql = 'SELECT books.book_id, title, authors.author, cover, description, ROUND(AVG(ratings.rate),1) AS ratings FROM books LEFT JOIN authors ON books.author_id = authors.author_id LEFT JOIN ratings ON books.book_id = ratings.book_id WHERE books.book_id = ? GROUP BY books.book_id, title, authors.author, cover, description'
+    const [result] = await db.query(sql, [id])
+    return result[0]
 }
 
 async function createAuthor(author) {
@@ -52,14 +52,13 @@ async function deleteRating(user_id, book_id) {
 }
 
 async function rndBook() {
-    const sql = 'SELECT b.title, a.author, b.cover, ROUND(AVG(r.rate),1) AS ratings FROM books b LEFT JOIN authors a ON b.author_id = a.author_id LEFT JOIN ratings r ON b.book_id = r.book_id GROUP BY b.book_id, b.title, a.author, b.cover ORDER BY RAND() LIMIT 3'
+    const sql = 'SELECT b.book_id, b.title, a.author, b.cover, ROUND(AVG(r.rate),1) AS ratings FROM books b LEFT JOIN authors a ON b.author_id = a.author_id LEFT JOIN ratings r ON b.book_id = r.book_id GROUP BY b.book_id, b.title, a.author, b.cover ORDER BY RAND() LIMIT 3'
     const [result] = await db.query(sql)
-
     return result
 }
 
 async function userRatedBooks(userId) {
-    const sql = 'SELECT b.title, a.author, b.cover, ROUND(AVG(r.rate),1) AS ratings FROM books b JOIN authors a ON b.author_id = a.author_id JOIN ratings r ON b.book_id = r.book_id AND r.user_id = ? GROUP BY b.book_id, b.title, a.author, b.cover ORDER BY RAND() LIMIT 3'
+    const sql = 'SELECT b.book_id, b.title, a.author, b.cover, ROUND(AVG(r.rate),1) AS ratings FROM books b JOIN authors a ON b.author_id = a.author_id JOIN ratings r ON b.book_id = r.book_id AND r.user_id = ? GROUP BY b.book_id, b.title, a.author, b.cover ORDER BY RAND() LIMIT 3'
     const [result] = await db.query(sql, [userId])
     return result
 }
