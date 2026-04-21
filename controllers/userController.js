@@ -7,8 +7,8 @@ const { findByEmail, createUser, getAllUser } = require('../models/userModel')
 
 const cookieOpts = {
     httpOnly: true,
-    secure: false, // https-nél true
-    sameSite: 'lax',
+    secure: true, // https-nél true
+    sameSite: 'none',
     path: '/',
     maxAge: 1000 * 60 * 60 * 24 * 7
 }
@@ -92,7 +92,10 @@ async function whoAmI(req, res) {
 
 // logout
 async function logout(req, res) {
-    return res.clearCookie(config.COOKIE_NAME, { path: '/' }).status(200).json({ message: 'Sikeres kilépés' })
+    return res.clearCookie(config.COOKIE_NAME, { httpOnly: true,
+        secure: true, // https-nél true
+        sameSite: 'none',
+        path: '/', }).status(200).json({ message: 'Sikeres kilépés' })
 }
 
 
