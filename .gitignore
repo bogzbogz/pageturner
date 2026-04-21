@@ -1,3 +1,4 @@
 /node_modules
+/uploads_tmp
 package-lock.json
 .env

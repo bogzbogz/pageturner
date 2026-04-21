@@ -14,11 +14,11 @@ async function getBooks(req, res) {
 
 async function getBookById(req, res) {
     try {
-        const result = await bookId()
+        const { id } = req.params
+        const result = await bookId(id)
 
         return res.status(200).json(result)
     } catch (err) {
-        // console.log(err);
         return res.status(500).json({ error: 'Nem sikerült lekérni a könyvet' })
     }
 }
@@ -90,7 +90,7 @@ async function getCategory(req, res) {
     try {
         //console.log(req.params);
         const { categories_id } = req.params
-        console.log(categories_id);
+       
         const result = await categorySelect(categories_id)
         //console.log(result);
         return res.status(200).json(result)
