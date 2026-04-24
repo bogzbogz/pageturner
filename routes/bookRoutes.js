@@ -1,5 +1,5 @@
 const express = require('express')
-const { getBooks, getBookById, bookCreate, rating, delRating, getCategory, randomBook, userRatedBook, allBook } = require('../controllers/bookController')
+const { getBooks, getBookById, bookCreate, rating, delRating, getCategory, randomBook, userRatedBook, randomBookAll } = require('../controllers/bookController')
 const { auth } = require('../middleware/userMiddleware')
 const { upload } = require('../middleware/bookUploadMiddleware')
 
@@ -14,6 +14,7 @@ router.get('/category/:categories_id', auth, getCategory)
 
 router.post('/createBook', auth, upload.single('cover'), bookCreate);
 router.get('/randomBooks', randomBook)
+router.get('/randomBooksAll', randomBookAll)
 router.get('/userRatedBooks', auth, userRatedBook)
 
 

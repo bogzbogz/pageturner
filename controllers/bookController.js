@@ -1,4 +1,4 @@
-const { getCardBooks, bookId, createRating, deleteRating, categorySelect, createAuthor, createBook, getAuthorIdByName, rndBook, userRatedBooks } = require('../models/bookModel')
+const { getCardBooks, bookId, createRating, deleteRating, categorySelect, createAuthor, createBook, getAuthorIdByName, rndBook, userRatedBooks, rndBookAll } = require('../models/bookModel')
 
 
 async function getBooks(req, res) {
@@ -122,4 +122,15 @@ async function userRatedBook(req, res) {
     }
 }
 
-module.exports = { getBooks, getBookById, bookCreate, rating, delRating, getCategory, randomBook, userRatedBook }
+async function randomBookAll(req, res) {
+    try {
+        const result = await rndBookAll()
+ 
+        return res.status(200).json(result)
+     } catch (err) {
+        // console.log(err)
+         return res.status(500).json({ error: 'Adatbázis hiba a könyvek megjelenítésekor' })
+     }
+}
+
+module.exports = { getBooks, getBookById, bookCreate, rating, delRating, getCategory, randomBook, userRatedBook, randomBookAll }
