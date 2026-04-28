@@ -1,4 +1,4 @@
-const { getCardBooks, bookId, createRating, deleteRating, categorySelect, createAuthor, createBook, getAuthorIdByName, rndBook, userRatedBooks, rndBookAll } = require('../models/bookModel')
+const { getCardBooks, bookId, createRating, deleteRating, categorySelect, createAuthor, createBook, getAuthorIdByName, rndBook, userRatedBooks, rndBookAll, searchBooks  } = require('../models/bookModel')
 
 
 async function getBooks(req, res) {
@@ -133,4 +133,14 @@ async function randomBookAll(req, res) {
      }
 }
 
-module.exports = { getBooks, getBookById, bookCreate, rating, delRating, getCategory, randomBook, userRatedBook, randomBookAll }
+async function search(req, res) {
+    try {
+        const { query } = req.params
+        const result = await searchBooks(query)
+        return res.status(200).json(result)
+    } catch (err) {
+        return res.status(500).json({ error: 'Keresés sikertelen' })
+    }
+}
+
+module.exports = { getBooks, getBookById, bookCreate, rating, delRating, getCategory, randomBook, userRatedBook, randomBookAll, search }

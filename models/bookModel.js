@@ -67,5 +67,10 @@ async function userRatedBooks(userId) {
     return result
 }
 
+async function searchBooks(query) {
+    const sql = 'SELECT b.book_id, b.title, a.author, b.cover, ROUND(AVG(r.rate),1) AS ratings FROM books b LEFT JOIN authors a ON b.author_id = a.author_id LEFT JOIN ratings r ON b.book_id = r.book_id WHERE b.title LIKE ? GROUP BY b.book_id, b.title, a.author, b.cover'
+    const [result] = await db.query(sql, [`%${query}%`])
+    return result
+}
 
-module.exports = { getCardBooks, bookId, createAuthor, createBook, getAuthorIdByName, createRating, deleteRating, categorySelect, rndBook, userRatedBooks, rndBookAll }
+module.exports = { getCardBooks, bookId, createAuthor, createBook, getAuthorIdByName, createRating, deleteRating, categorySelect, rndBook, userRatedBooks, rndBookAll, searchBooks }

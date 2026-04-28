@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { config } = require('../config/dotenvConfig')
-const { findByEmail, createUser, getAllUser } = require('../models/userModel')
+const { findByEmail, createUser, getAllUser, findById, checkUsername, checkEmail, updateUsername, updateEmail, updatePassword } = require('../models/userModel')
 
 
 
@@ -98,5 +98,55 @@ async function logout(req, res) {
         path: '/', }).status(200).json({ message: 'Sikeres kilépés' })
 }
 
+// username módosítás
+async function editUsername(req, res) {
+    try {
+        const { user_id } = req.user
+        const { username } = req.body
+        if (!username) return res.status(400).json({ error: 'Felhasználónév kötelező' })
+        const exists = await checkUsername(username)
+        if (exists && exists.user_id !== parseInt(user_id)) {
+            return res.status(409).json({ error: 'Ez a felhasználónév már foglalt' })
+        }
+        await updateUsername(user_id, username)
+        return res.status(200).json({ message: 'Sikeres módosítás' })
+    } catch (err) {
+        return res.status(500).json({ error: 'Szerver hiba' })
+    }
+}
 
-module.exports = { register, login, whoAmI, logout }
+// email módosítás
+async function editEmail(req, res) {
+    try {
+        const { user_id } = req.user
+        const { email } = req.body
+        if (!email) return res.status(400).json({ error: 'Email kötelező' })
+        const exists = await checkEmail(email)
+        if (exists && exists.user_id !== parseInt(user_id)) {
+            return res.status(409).json({ error: 'Ez az email már foglalt' })
+        }
+        await updateEmail(user_id, email)
+        return res.status(200).json({ message: 'Sikeres módosítás' })
+    } catch (err) {
+        return res.status(500).json({ error: 'Szerver hiba' })
+    }
+}
+
+// jelszó módosítás
+async function editPassword(req, res) {
+    try {
+        const { user_id } = req.user
+        const { currentPassword, newPassword } = req.body
+        if (!currentPassword || !newPassword) return res.status(400).json({ error: 'Minden mező kötelező' })
+        const user = await findById(user_id)
+        const ok = await bcrypt.compare(currentPassword, user.password)
+        if (!ok) return res.status(401).json({ error: 'Hibás jelenlegi jelszó' })
+        const hash = await bcrypt.hash(newPassword, 10)
+        await updatePassword(user_id, hash)
+        return res.status(200).json({ message: 'Sikeres jelszó módosítás' })
+    } catch (err) {
+        return res.status(500).json({ error: 'Szerver hiba' })
+    }
+}
+
+module.exports = { register, login, whoAmI, logout, editUsername, editEmail, editPassword }
