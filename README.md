@@ -217,3 +217,11 @@ COOKIE_NAME=token
   }
 }
 ```
+
+## 🚀 Jövőbeli tervek
+
+- ⭐ Könyvek értékelésének teljes implementálása (rating rendszer fejlesztése)
+- 💬 Komment rendszer hozzáadása a könyvekhez
+- ❤️ Kedvencek lista kialakítása
+- 📊 Felhasználói statisztikák (pl. elolvasott könyvek)
+- 🔍 Fejlettebb keresési és szűrési lehetőségek
