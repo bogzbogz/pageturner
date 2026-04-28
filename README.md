@@ -58,7 +58,7 @@ A PageTurner egy könyvajánló webalkalmazás backendje. Az alkalmazás lehető
 ---
 
 ## 🗄️ Adatbázis struktúra
-
+![DrawSQL diagram](./gitPictures/drawSQL.png)
 👉 [DrawSQL diagram megtekintése](https://drawsql.app/teams/123456-15/diagrams/pageturner)
 
 | Tábla | Leírás | Főbb mezők |
@@ -183,6 +183,10 @@ COOKIE_NAME=token
 | DELETE | `/admin/admin/delete/:user_id` | Felhasználó törlése | ✅ Admin |
 | PUT | `/admin/admin/book/edit/:book_id` | Könyv szerkesztése | ✅ Admin |
 | DELETE | `/admin/admin/book/delete/:book_id` | Könyv törlése | ✅ Admin |
+
+## 📬 API tesztelés (Postman)
+
+![Postman teszt](./gitPictures/postmanTest.png)
 
 ---
 
