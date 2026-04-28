@@ -225,3 +225,4 @@ COOKIE_NAME=token
 - ❤️ Kedvencek lista kialakítása
 - 📊 Felhasználói statisztikák (pl. elolvasott könyvek)
 - 🔍 Fejlettebb keresési és szűrési lehetőségek
+- 🧱 Adatbázis bővítése és optimalizálása (kommentek, favorites, indexing)
