@@ -24,6 +24,8 @@ async function getBookById(req, res) {
 }
 
 async function bookCreate(req, res) {
+    console.log("USER:", req.user)
+console.log("FILE:", req.file)
     try {
         const { title, author, categories_id, description } = req.body;
 
