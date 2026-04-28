@@ -7,16 +7,16 @@
 
 ## 📋 Tartalomjegyzék
 
-- [A projektről](#a-projektről)
-- [Főbb funkciók](#főbb-funkciók)
-- [Technológiai stack](#technológiai-stack)
-- [Adatbázis struktúra](#adatbázis-struktúra)
-- [Projekt struktúra](#projekt-struktúra)
-- [Telepítés és futtatás](#telepítés-és-futtatás)
-- [Környezeti változók](#környezeti-változók)
-- [API végpontok](#api-végpontok)
-- [Middleware-ek](#middleware-ek)
-- [Használt függőségek](#használt-függőségek)
+- [A projektről](#-a-projektről)
+- [Főbb funkciók](#-főbb-funkciók)
+- [Technológiai stack](#-technológiai-stack)
+- [Adatbázis struktúra](#-adatbázis-struktúra)
+- [Projekt struktúra](#-projekt-struktúra)
+- [Telepítés és futtatás](#-telepítés-és-futtatás)
+- [Környezeti változók](#-környezeti-változók)
+- [API végpontok](#-api-végpontok)
+- [Middleware-ek](#-middleware-ek)
+- [Használt függőségek](#-használt-függőségek)
 
 ---
 
