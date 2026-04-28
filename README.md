@@ -188,6 +188,10 @@ COOKIE_NAME=token
 
 ![Postman teszt](./gitPictures/postmanTest.png)
 
+## 📬 Teszt link
+![Postman link](https://documenter.getpostman.com/view/48108235/2sBXqJJzuo)
+
+
 ---
 
 ## 🔒 Middleware-ek
